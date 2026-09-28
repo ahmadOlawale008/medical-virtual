@@ -1,0 +1,29 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import TwoStimuliSimulator from "./components/two-stimuli-simulator";
+
+export const metadata: Metadata = {
+  title: "Effect of Two Successive Stimuli | MedLab Virtual",
+  description: "Change the interval between paired stimuli and observe temporal summation in an amphibian muscle preparation.",
+};
+
+export default function TwoSuccessiveStimuliPage() {
+  return (
+    <div className="min-h-dvh bg-[#0b1c27] text-white">
+      <header className="border-b border-white/10 bg-[#0d302d]">
+        <div className="mx-auto flex min-h-[74px] max-w-[1900px] items-center justify-between gap-5 px-4 sm:px-6">
+          <div className="flex items-center gap-4">
+            <Link href="/physiology/amphibian-physiology" className="text-xs text-white/55 transition hover:text-white">← Amphibian physiology</Link>
+            <span className="hidden h-5 w-px bg-white/10 sm:block" />
+            <div>
+              <p className="text-[10px] font-semibold tracking-[.12em] text-[#79c8bc]">EXPERIMENT 03</p>
+              <h1 className="mt-1 text-lg font-semibold">Effect of Two Successive Stimuli</h1>
+            </div>
+          </div>
+          <p className="hidden font-accent text-xs text-white/40 md:block">3D paired-stimulus preparation</p>
+        </div>
+      </header>
+      <TwoStimuliSimulator />
+    </div>
+  );
+}

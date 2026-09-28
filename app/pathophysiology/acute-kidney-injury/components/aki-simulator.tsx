@@ -36,7 +36,7 @@ export default function AkiSimulator() {
         ))}
       </div>
 
-      <div className="grid min-h-[720px] xl:grid-cols-[270px_minmax(650px,1fr)_310px]">
+      <div className="grid min-h-180 xl:grid-cols-[270px_minmax(650px,1fr)_310px]">
         <ControlPanel
           model={model}
           onChange={update}

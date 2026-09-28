@@ -24,9 +24,9 @@ const MuscleScene = dynamic(
 
 export default function TemperatureSimulator() {
   const [temperature, setTemperature] = useState(25);
-  const [trace, setTrace] = useState<TemperatureRecording | null>(null);
   const [recordings, setRecordings] = useState<TemperatureRecording[]>([]);
   const [sequence, setSequence] = useState(0);
+  const trace = recordings.at(-1) ?? null;
 
   function changeTemperature(nextTemperature: number) {
     setTemperature(nextTemperature);
@@ -36,14 +36,10 @@ export default function TemperatureSimulator() {
     const nextSequence = sequence + 1;
     const nextRecording = createTemperatureRecording(nextSequence, temperature);
     setSequence(nextSequence);
-    if (trace) {
-      setRecordings((current) => [...current, trace]);
-    }
-    setTrace(nextRecording);
+    setRecordings((current) => [...current, nextRecording]);
   }
 
   function reset() {
-    setTrace(null);
     setRecordings([]);
     setSequence(0);
     setTemperature(25);
@@ -54,9 +50,9 @@ export default function TemperatureSimulator() {
       <section className="relative min-w-0 border-b border-white/10 xl:border-b-0 xl:border-r">
         <MuscleScene
           trace={trace}
-          traces={trace ? [...recordings, trace] : recordings}
+          traces={recordings}
           temperature={temperature}
-          showElectrodes={false}
+          showElectrodes
           recordingWindowMs={TEMPERATURE_WINDOW_MS}
           stimulusOffsetMs={0}
           forceAxisMax={10}
@@ -66,9 +62,7 @@ export default function TemperatureSimulator() {
         </div>
       </section>
       <aside className="grid content-start gap-5 overflow-y-auto p-4 sm:p-5">
-        <TemperatureChart
-          recordings={trace ? [...recordings, trace] : recordings}
-        />
+        <TemperatureChart recordings={recordings} />
         <TemperatureControls
           temperature={temperature}
           onTemperatureChange={changeTemperature}

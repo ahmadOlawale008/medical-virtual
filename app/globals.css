@@ -185,6 +185,29 @@ body {
   to { transform: scaleX(1); }
 }
 
+.question-editor .ql-toolbar {
+  border-color: var(--border);
+  border-radius: 0.75rem 0.75rem 0 0;
+  background: var(--surface-muted);
+}
+
+.question-editor .ql-container {
+  min-height: 9rem;
+  border-color: var(--border);
+  border-radius: 0 0 0.75rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.question-editor .ql-editor {
+  min-height: 9rem;
+}
+
+.question-editor .ql-editor.ql-blank::before {
+  color: var(--muted);
+  font-style: normal;
+}
+
 @keyframes flow-sequence {
   0%, 16%, 100% {
     border-color: var(--border);

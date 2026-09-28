@@ -1,21 +1,6 @@
 import DisciplineExplorer from "./ui/discipline-explorer";
-
-function BrandMark() {
-  return (
-    <span
-      aria-hidden="true"
-      className="grid size-9 place-items-center rounded-md bg-primary text-white"
-    >
-      <svg
-        className="size-5 fill-none stroke-current stroke-[1.8]"
-        viewBox="0 0 32 32"
-      >
-        <path d="M16 5v22M5 16h22" />
-        <path d="M9 9c4.5 2 9.5 2 14 0M9 23c4.5-2 9.5-2 14 0" />
-      </svg>
-    </span>
-  );
-}
+import Link from "next/link";
+import SiteHeader from "./ui/site-header";
 
 function AnatomyPanel() {
   return (
@@ -114,31 +99,7 @@ export default function Home() {
         Skip to content
       </a>
 
-      <header className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-4">
-        <a
-          className="flex items-center gap-3"
-          href="#top"
-          aria-label="MedLab Virtual home"
-        >
-          <BrandMark />
-          <span className="font-accent text-base font-bold tracking-tight">
-            MedLab Virtual
-          </span>
-        </a>
-
-        <nav className="hidden items-center gap-7 text-sm text-muted sm:flex">
-          <a className="hover:text-primary" href="#disciplines">
-            Disciplines
-          </a>
-          <a className="hover:text-primary" href="#how-it-works">
-            How it works
-          </a>
-        </nav>
-
-        <span className="border-l-2 border-secondary pl-3 text-sm font-semibold text-primary">
-          Free access
-        </span>
-      </header>
+      <SiteHeader />
 
       <main id="main-content">
         <section
@@ -167,12 +128,12 @@ export default function Home() {
               >
                 Explore laboratories
               </a>
-              <a
+              <Link
                 className="inline-flex min-h-11 items-center rounded-md border border-white/25 px-5 text-sm font-semibold transition-colors hover:bg-white/10 focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-white"
-                href="#how-it-works"
+                href="/auth/signup"
               >
-                How the platform works
-              </a>
+                Create a student account
+              </Link>
             </div>
 
             <div className="mt-9 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/15 pt-5 text-xs text-white/60">
@@ -260,7 +221,11 @@ export default function Home() {
       <footer className="border-t border-border bg-white">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>Educational use only—not clinical decision support.</p>
-          <p>© 2026 MedLab Virtual</p>
+          <div className="flex items-center gap-4">
+            <a href="/privacy" className="hover:text-primary">Privacy policy</a>
+            <a href="/terms" className="hover:text-primary">Terms of service</a>
+            <p>© 2026 MedLab Virtual</p>
+          </div>
         </div>
       </footer>
     </div>

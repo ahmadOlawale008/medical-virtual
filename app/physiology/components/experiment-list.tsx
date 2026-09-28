@@ -1,7 +1,15 @@
 import Link from "next/link";
 import type { PhysiologyExperiment } from "../lab-data";
 
-export default function ExperimentList({ experiments }: { experiments: PhysiologyExperiment[] }) {
+export default function ExperimentList({
+  experiments,
+  cardLabel = "EXPERIMENT",
+  actionLabel = "Open simulation",
+}: {
+  experiments: PhysiologyExperiment[];
+  cardLabel?: string;
+  actionLabel?: string;
+}) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {experiments.map((experiment) => (
@@ -11,14 +19,14 @@ export default function ExperimentList({ experiments }: { experiments: Physiolog
             href={experiment.href}
             className="group rounded-lg border border-border bg-white p-5 transition-colors hover:border-primary/35 hover:bg-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
           >
-            <ExperimentCard experiment={experiment} action="Open simulation" />
+            <ExperimentCard experiment={experiment} cardLabel={cardLabel} action={actionLabel} />
           </Link>
         ) : (
           <article
             key={experiment.number}
             className="group rounded-lg border border-border bg-white p-5 transition-colors hover:border-primary/35 hover:bg-primary-soft"
           >
-            <ExperimentCard experiment={experiment} action="Simulation planned" />
+            <ExperimentCard experiment={experiment} cardLabel={cardLabel} action="Simulation planned" />
           </article>
         )
       ))}
@@ -28,16 +36,18 @@ export default function ExperimentList({ experiments }: { experiments: Physiolog
 
 function ExperimentCard({
   experiment,
+  cardLabel,
   action,
 }: {
   experiment: PhysiologyExperiment;
+  cardLabel: string;
   action: string;
 }) {
   return (
     <>
       <div className="flex items-center justify-between gap-3">
         <span className="text-[11px] font-semibold tracking-[.08em] text-primary">
-          EXPERIMENT
+          {cardLabel}
         </span>
         <span className="font-accent text-xs text-muted">{experiment.number}</span>
       </div>

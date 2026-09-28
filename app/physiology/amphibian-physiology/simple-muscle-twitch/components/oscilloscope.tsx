@@ -10,26 +10,33 @@ import {
 const WIDTH = 520;
 const HEIGHT = 310;
 const PADDING = { left: 52, right: 18, top: 18, bottom: 38 };
+const TRACE_COLORS = ["#53df98", "#58b9ff", "#ff9a62", "#d795ff", "#f1d65f"];
 
-export default function Oscilloscope({ trace }: { trace: TwitchTrace | null }) {
-  const [cursor, setCursor] = useState<{ time: number; force: number } | null>(null);
+export default function Oscilloscope({
+  trace,
+  traces,
+}: {
+  trace: TwitchTrace | null;
+  traces: TwitchTrace[];
+}) {
+  const [cursorTime, setCursorTime] = useState<number | null>(null);
   const plotWidth = WIDTH - PADDING.left - PADDING.right;
   const plotHeight = HEIGHT - PADDING.top - PADDING.bottom;
   const x = (time: number) => PADDING.left + (time / SIMPLE_TWITCH_WINDOW_MS) * plotWidth;
   const y = (force: number) => PADDING.top + plotHeight - (force / 12) * plotHeight;
-  const path = trace
-    ? Array.from({ length: 251 }, (_, index) => {
+  const paths = traces.map((recording) => ({
+    recording,
+    path: Array.from({ length: 251 }, (_, index) => {
         const time = (index / 250) * SIMPLE_TWITCH_WINDOW_MS;
-        const force = forceAtTime(Math.max(0, time - 20), trace);
+        const force = forceAtTime(Math.max(0, time - 20), recording);
         return `${index === 0 ? "M" : "L"}${x(time).toFixed(1)},${y(force).toFixed(1)}`;
-      }).join(" ")
-    : null;
-  const cursorX = cursor ? x(cursor.time) : 0;
-  const cursorY = cursor ? y(cursor.force) : 0;
+      }).join(" "),
+  }));
+  const cursorX = cursorTime === null ? 0 : x(cursorTime);
   const tooltipX = cursorX > WIDTH - 185 ? cursorX - 170 : cursorX + 10;
 
   function inspectTrace(event: PointerEvent<SVGSVGElement>) {
-    if (!trace) return;
+    if (traces.length === 0) return;
 
     const bounds = event.currentTarget.getBoundingClientRect();
     const pointerX = ((event.clientX - bounds.left) / bounds.width) * WIDTH;
@@ -38,8 +45,7 @@ export default function Oscilloscope({ trace }: { trace: TwitchTrace | null }) {
       Math.max(PADDING.left, pointerX),
     );
     const time = ((clampedX - PADDING.left) / plotWidth) * SIMPLE_TWITCH_WINDOW_MS;
-    const force = forceAtTime(Math.max(0, time - 20), trace);
-    setCursor({ time, force });
+    setCursorTime(time);
   }
 
   return (
@@ -88,19 +94,20 @@ export default function Oscilloscope({ trace }: { trace: TwitchTrace | null }) {
 
         <line x1={x(20)} x2={x(20)} y1={PADDING.top} y2={PADDING.top + plotHeight} stroke="#eb5656" strokeWidth="1.3" />
         <text x={x(20) + 6} y={PADDING.top + 12} fill="#eb5656" fontSize="9">Stim</text>
-        {path && (
+        {paths.map(({ recording, path }, index) => (
           <path
-            key={trace?.id ?? 0}
+            key={recording.id}
             d={path}
             fill="none"
-            stroke={trace?.peakForce ? "#53df98" : "#64756d"}
-            strokeWidth="2.4"
+            stroke={recording.peakForce ? TRACE_COLORS[index % TRACE_COLORS.length] : "#64756d"}
+            strokeWidth={recording.id === trace?.id ? "2.7" : "2.1"}
             strokeLinecap="round"
+            opacity={recording.id === trace?.id ? 1 : 0.78}
             className="twitch-trace"
             pathLength="1"
           />
-        )}
-        {trace && cursor && (
+        ))}
+        {cursorTime !== null && traces.length > 0 && (
           <g className="pointer-events-none">
             <line
               x1={cursorX}
@@ -110,30 +117,42 @@ export default function Oscilloscope({ trace }: { trace: TwitchTrace | null }) {
               stroke="#eef4ef"
               strokeWidth="1.2"
             />
-            <circle
-              cx={cursorX}
-              cy={cursorY}
-              r="4.5"
-              fill="#53df98"
-              stroke="#f5fff9"
-              strokeWidth="2"
-            />
+            {traces.map((recording, index) => (
+              <circle
+                key={recording.id}
+                cx={cursorX}
+                cy={y(forceAtTime(Math.max(0, cursorTime - 20), recording))}
+                r="3.5"
+                fill={TRACE_COLORS[index % TRACE_COLORS.length]}
+                stroke="#f5fff9"
+                strokeWidth="1.4"
+              />
+            ))}
             <rect
               x={tooltipX}
               y="28"
               width="160"
-              height="51"
+              height={34 + traces.length * 16}
               rx="4"
               fill="#101a2d"
               fillOpacity="0.96"
               stroke="#41516c"
             />
             <text x={tooltipX + 11} y="48" fill="#b9c5d8" fontSize="11">
-              TIME: {cursor.time.toFixed(1)} ms
+              TIME: {cursorTime.toFixed(1)} ms
             </text>
-            <text x={tooltipX + 11} y="68" fill="#53df98" fontSize="12" fontWeight="700">
-              FORCE: {cursor.force.toFixed(2)} g
-            </text>
+            {traces.map((recording, index) => (
+              <text
+                key={recording.id}
+                x={tooltipX + 11}
+                y={67 + index * 16}
+                fill={TRACE_COLORS[index % TRACE_COLORS.length]}
+                fontSize="10"
+                fontWeight="700"
+              >
+                {recording.voltage.toFixed(1)} V · {forceAtTime(Math.max(0, cursorTime - 20), recording).toFixed(2)} g
+              </text>
+            ))}
           </g>
         )}
       </svg>

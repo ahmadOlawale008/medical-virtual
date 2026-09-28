@@ -50,9 +50,9 @@ export function calculateKidneyFunction(model: AkiModel): AkiResults {
   const bun = clamp(creatinine * bunCreatinineRatio, 8, 110);
   const urineOutput = clamp(
     1.25 -
-      model.perfusionLoss * 0.008 -
-      model.tubularDamage * 0.005 -
-      model.obstruction * 0.009,
+    model.perfusionLoss * 0.008 -
+    model.tubularDamage * 0.005 -
+    model.obstruction * 0.009,
     0.08,
     1.4,
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import Apparatus from "./apparatus";
@@ -16,6 +16,14 @@ export default function MuscleScene({
   forceAxisMax,
   playbackMs,
   simulationTimeMs,
+  drumRevolutions,
+  wrapTraceAroundDrum,
+  loadGrams,
+  loadMode,
+  recordingStyle,
+  drumTraceRadius,
+  inductionCoilDistance,
+  nerveStimulationPoint,
 }: {
   trace: TwitchTrace | null;
   traces?: TwitchTrace[];
@@ -26,17 +34,28 @@ export default function MuscleScene({
   forceAxisMax?: number;
   playbackMs?: number;
   simulationTimeMs?: number;
+  drumRevolutions?: number;
+  wrapTraceAroundDrum?: boolean;
+  loadGrams?: number;
+  loadMode?: "afterloaded" | "freeloaded";
+  recordingStyle?: "curve" | "line" | "paired-lines";
+  drumTraceRadius?: number;
+  inductionCoilDistance?: number;
+  nerveStimulationPoint?: "muscle" | "vertebral";
 }) {
+  const [hoveredPart, setHoveredPart] = useState<string | null>(null);
+
   return (
     <div className="relative h-full min-h-[520px] w-full bg-[#dbe4eb]">
       <Canvas
+        key={`recording-${recordingStyle ?? "curve"}`}
         shadows
         camera={{ position: [8.2, 5.8, 9.4], fov: 39, near: 0.1, far: 100 }}
         dpr={[1, 1.75]}
         gl={{ antialias: true, alpha: false }}
       >
         <color attach="background" args={["#dbe4eb"]} />
-        <fog attach="fog" args={["#dbe4eb", 15, 27]} />
+        <fog attach="fog" args={["#0d0d0e", 15, 27]} />
         <ambientLight intensity={1.35} />
         <directionalLight
           position={[6, 10, 7]}
@@ -56,12 +75,26 @@ export default function MuscleScene({
           forceAxisMax={forceAxisMax}
           playbackMs={playbackMs}
           simulationTimeMs={simulationTimeMs}
+          drumRevolutions={drumRevolutions}
+          wrapTraceAroundDrum={wrapTraceAroundDrum}
+          loadGrams={loadGrams}
+          loadMode={loadMode}
+          recordingStyle={recordingStyle}
+          drumTraceRadius={drumTraceRadius}
+          inductionCoilDistance={inductionCoilDistance}
+          nerveStimulationPoint={nerveStimulationPoint}
+          onHoverChange={setHoveredPart}
         />
         <CameraController />
       </Canvas>
       <div className="pointer-events-none absolute bottom-4 left-4 rounded-md border border-black/10 bg-white/75 px-3 py-2 text-[10px] leading-4 text-[#41575a] backdrop-blur-sm">
         Drag to rotate · Scroll to zoom<br />Double-click to reset view
       </div>
+      {hoveredPart && (
+        <div className="pointer-events-none absolute right-4 top-4 rounded-full border border-black/10 bg-[#10242b]/92 px-3 py-2 text-xs font-semibold text-white shadow-sm backdrop-blur-sm">
+          {hoveredPart}
+        </div>
+      )}
     </div>
   );
 }

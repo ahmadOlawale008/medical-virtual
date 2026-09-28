@@ -14,18 +14,6 @@ type Discipline = {
 const disciplines: Discipline[] = [
   {
     number: "01",
-    title: "Anatomy",
-    description:
-      "Examine body structures, regional relationships, and microscopic organization.",
-    topics: ["Gross anatomy", "Neuroanatomy", "Histology"],
-    href: "/anatomy",
-    available: false,
-    icon: (
-      <path d="M12 3v18M8 6c0 3 1.8 4.5 4 4.5S16 9 16 6M6 14c2-1.2 4-1.8 6-1.8s4 .6 6 1.8M8 21v-5M16 21v-5" />
-    ),
-  },
-  {
-    number: "02",
     title: "Physiology",
     description:
       "Investigate how organ systems function, regulate, and respond to change.",
@@ -36,23 +24,9 @@ const disciplines: Discipline[] = [
       <path d="M3 12h4l2-5 4 11 3-7 2 3h3M7 4h10M7 20h10" />
     ),
   },
+  
   {
-    number: "03",
-    title: "Pharmacology",
-    description:
-      "Explore dose-response relationships, receptor action, and drug disposition.",
-    topics: ["PK / PD", "Dose response", "Interactions"],
-    href: "/pharmacology",
-    available: false,
-    icon: (
-      <>
-        <path d="m8 4 12 12a3 3 0 0 1-4 4L4 8a3 3 0 0 1 4-4Z" />
-        <path d="m9 13 4-4M14 15h5" />
-      </>
-    ),
-  },
-  {
-    number: "04",
+    number: "02",
     title: "Pathophysiology",
     description:
       "Connect altered biological mechanisms with signs, symptoms, and data.",

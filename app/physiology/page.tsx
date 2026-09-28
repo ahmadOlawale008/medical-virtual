@@ -32,6 +32,30 @@ const categories = [
     topics: ["3D microscope", "Stage control", "4× to 100× zoom"],
     href: "/physiology/microscope-master",
   },
+  {
+    number: "04",
+    title: "Cardiovascular Physiology",
+    count: "1 simulation",
+    description: "Investigate human cardiac mechanics and correlate heart actions with pressure, volume, ECG, and sounds.",
+    topics: ["Cardiac cycle", "Wiggers diagram", "Heart sounds"],
+    href: "/physiology/cardiovascular",
+  },
+  {
+    number: "05",
+    title: "Neurophysiology Lab",
+    count: "2 simulations",
+    description: "Explore ion transport, electrochemical gradients, and electrical potentials in excitable cells.",
+    topics: ["Membrane potential", "Ion gradients", "Nernst & GHK"],
+    href: "/physiology/neurophysiology",
+  },
+  {
+    number: "06",
+    title: "Renal Physiology Lab",
+    count: "1 simulation",
+    description: "Examine urine chemistry and connect reagent-strip findings with renal and systemic physiology.",
+    topics: ["Urinalysis", "Reagent pads", "Clinical interpretation"],
+    href: "/physiology/renal-physiology",
+  },
 ];
 
 export default function PhysiologyPage() {
@@ -55,10 +79,10 @@ export default function PhysiologyPage() {
         <section className="mx-auto max-w-6xl px-4 py-10">
           <div className="mb-5 flex items-center justify-between border-b border-border pb-4">
             <h2 className="text-sm font-semibold">Laboratory categories</h2>
-            <span className="text-xs text-muted">3 categories</span>
+            <span className="text-xs text-muted">6 categories</span>
           </div>
 
-          <div className="grid gap-3 lg:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {categories.map((category) => (
               <Link
                 key={category.number}
